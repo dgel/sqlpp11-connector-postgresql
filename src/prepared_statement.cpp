@@ -36,6 +36,10 @@
 #include <sstream>
 #include <date/date.h>
 
+#if defined(_WINDOWS) || defined(__MINGW32__)
+#include <windows.h>
+#endif
+
 namespace sqlpp
 {
   namespace postgresql
@@ -158,13 +162,16 @@ namespace sqlpp
          if (now - last_query > 3600)
          {
 #if defined(_WINDOWS) || defined(__MINGW32__)
-            offset = -_timezone;
+           TIME_ZONE_INFORMATION tz;
+           DWORD tz_id = GetTimeZoneInformation(&tz);
+           auto offset_minutes = tz.Bias + (tz_id != TIME_ZONE_ID_DAYLIGHT ? tz.StandardBias : tz.DaylightBias);
+           offset = -(offset_minutes * 60);
 #else
             struct tm* tm  = std::localtime(&now);
             offset = tm->tm_gmtoff;
-            last_query = now;
 #endif
          }
+         last_query = now;
          return offset;
       }
     }
