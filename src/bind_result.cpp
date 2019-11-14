@@ -326,9 +326,9 @@ namespace sqlpp
           {
             std::cerr << "PostgreSQL debug: Timezone is " << zone_hour << " : " << zone_min << std::endl;
           }
-          *value += std::chrono::hours(zone_hour);
-          // minutes should be removed from timestamp if TZ is -XX:YY
-          *value += (zone_hour >= 0 ? 1 : -1) * std::chrono::minutes(zone_min);
+          *value -= std::chrono::hours(zone_hour);
+          // minutes should be added to timestamp if TZ is -XX:YY
+          *value -= (zone_hour >= 0 ? 1 : -1) * std::chrono::minutes(zone_min);
         }
         if (_handle->debug())
         {

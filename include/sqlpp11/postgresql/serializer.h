@@ -47,6 +47,22 @@ namespace sqlpp
       return context;
     }
   };
+
+  template <typename Period>
+  struct serializer_t<postgresql::context_t, time_point_operand<Period>>
+  {
+    using _serialize_check = consistent_t;
+    using Operand = time_point_operand<Period>;
+
+    static postgresql::context_t& _(const Operand& t, postgresql::context_t& context)
+    {
+      const auto dp = ::sqlpp::chrono::floor<::date::days>(t._t);
+      const auto time = ::date::make_time(t._t - dp);
+      const auto ymd = ::date::year_month_day{dp};
+      context << "'" << ymd << ' ' << time << "+00'";
+      return context;
+    }
+  };
 }
 
 #endif
