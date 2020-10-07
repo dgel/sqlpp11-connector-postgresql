@@ -44,24 +44,46 @@ types = {
     'int': 'integer',
     'bigint': 'bigint',
     'char': 'char_',
+    'character': 'char_',
     'varchar': 'varchar',
     'character varying': 'varchar',
     'text': 'text',
     'bool': 'boolean',
     'boolean': 'boolean',
     'double': 'floating_point',
+    'double precision': 'floating_point',
     'float': 'floating_point',
     'numeric': 'floating_point',
+    'decimal': 'floating_point',
+    'real': 'floating_point',
+    'smallserial': 'smallint',
+    'serial': 'integer',
+    'bigserial': 'bigint',
 
+    # Json types (could be mapped to for example nohlmann/json)
     'json' : 'text',
     'jsonb' : 'text',
 
-    # For now keep this a varchar
+    # Map to the day/time point
     'date': 'day_point',
     'time without time zone': 'time_point',
     'time with time zone': 'time_point',
     'timestamp without time zone': 'time_point',
     'timestamp with time zone': 'time_point',
+    'abstime': 'time_point',
+
+    # More mappings to varchar
+    'name': 'varchar',
+    'oid': 'varchar',
+    'ARRAY': 'varchar',
+    'pg_node_tree': 'varchar',
+    'xid': 'varchar',
+    'regproc': 'varchar',
+    'pg_lsn': 'varchar',
+    'inet': 'varchar',
+    'interval': 'varchar',
+    'bytea': 'varchar',
+    'anyarray': 'varchar',
 
     # User defined types, for now a varchar
     'USER-DEFINED': 'varchar',
@@ -108,7 +130,7 @@ for table in tables:
     for ns in nsList:
         _writeLine(fd, 0, "namespace " + ns + " {")
     _writeLine(fd, 0, "")
-    _writeLine(fd, 0, "namespace " + tableSchema + " {")
+    _writeLine(fd, 0, "namespace " + tableSchema + "_ {")
 
     tableColumnsNamespace = tableName + "_"
     _writeLine(fd, 1, "namespace " + tableColumnsNamespace + " {")
