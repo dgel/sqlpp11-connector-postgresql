@@ -80,11 +80,11 @@ target_compile_options(sqlpp11-connector-postgresql-dynamic PRIVATE -DBUILDING_D
 target_compile_features(sqlpp11-connector-postgresql PRIVATE cxx_auto_type)
 target_compile_features(sqlpp11-connector-postgresql-dynamic PRIVATE cxx_auto_type)
 
-target_link_libraries(sqlpp11-connector-postgresql PRIVATE sqlpp11::sqlpp11 $<BUILD_INTERFACE:${PostgreSQL_LIBRARIES}>)
-target_link_libraries(sqlpp11-connector-postgresql-dynamic PUBLIC sqlpp11::sqlpp11 PRIVATE ${PostgreSQL_LIBRARIES})
+target_link_libraries(sqlpp11-connector-postgresql PUBLIC sqlpp11::sqlpp11 PostgreSQL::PostgreSQL)
+target_link_libraries(sqlpp11-connector-postgresql-dynamic PUBLIC sqlpp11::sqlpp11 PostgreSQL::PostgreSQL)
 
-target_include_directories(sqlpp11-connector-postgresql PRIVATE ${sqlpp11_INCLUDE_DIRS} ${PostgreSQL_INCLUDE_DIRS} "../include/")
-target_include_directories(sqlpp11-connector-postgresql-dynamic PRIVATE ${sqlpp11_INCLUDE_DIRS} ${PostgreSQL_INCLUDE_DIRS} "../include/")
+target_include_directories(sqlpp11-connector-postgresql PUBLIC $<BUILD_INTERFACE:${sqlpp11-connector-postgresql_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+target_include_directories(sqlpp11-connector-postgresql-dynamic PUBLIC $<BUILD_INTERFACE:${sqlpp11-connector-postgresql_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
 
 # The include directory should be PUBLIC. However, that would store an absolute path in the package configuration
 # so leave it PRIVATE and correct that in the ...Config.cmake file. This can be changed when the FindPostgreSQL.cmake got updated.
@@ -102,16 +102,6 @@ set_target_properties(sqlpp11-connector-postgresql PROPERTIES
 set_target_properties(sqlpp11-connector-postgresql-dynamic PROPERTIES 
             VERSION ${sqlpp11-connector-postgresql_VERSION_STRING}
             SOVERSION ${sqlpp11-connector-postgresql_VERSION_MAJOR})
-
-set_property(TARGET sqlpp11-connector-postgresql APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-        )
-
-set_property(TARGET sqlpp11-connector-postgresql-dynamic APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-        )
 
 install(TARGETS sqlpp11-connector-postgresql
         EXPORT postgresqlTargets

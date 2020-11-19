@@ -24,7 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(sqlpp11-connector-postgresql VERSION 0.1 LANGUAGES CXX)
 
 option(ENABLE_TESTS "Build unit tests" ON)
@@ -39,8 +39,6 @@ if (NOT TARGET sqlpp11)
     find_package(Sqlpp11 REQUIRED)
 endif()
 find_package(PostgreSQL REQUIRED)
-
-include_directories("${PROJECT_SOURCE_DIR}/include")
 
 add_subdirectory(src)
 
